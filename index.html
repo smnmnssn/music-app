@@ -1,22 +1,21 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="sv">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width='device-width', initial-scale=1.0">
-  <title>Music App</title>
-  <script defer type="module" src="app.js"></script>
+  <meta charset="UTF-8" />
+  <title>Min Musikapp</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
-
-
 <body>
-  <h1
-    style="text-align: center; font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;">
-    Music Playlist App for Arbetsmetodik course
-  </h1>
+  <h1>Spellistor</h1>
+
+  <div id="playlist-container"></div>
+  <div id="playlist-list"></div>
 
 
+  <input type="text" id="playlist-name" placeholder="Ny spellista..." />
+  <input type="text" id="playlist-genre" placeholder="Genre..." />
+  <button id="create-playlist-btn">Skapa Spellista</button>
 
+  <script type="module" src="./app.js"></script>
 </body>
-
 </html>

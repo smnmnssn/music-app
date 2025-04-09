@@ -1,4 +1,4 @@
-import Song from './Song.js'; // eller rätt sökväg beroende på din struktur
+import Song from './Song.js';
 
 
 class Playlist {
