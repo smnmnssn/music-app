@@ -1,7 +1,7 @@
-import Song from './Song.js';
+import Song from './SongModel.js';
 
 
-class Playlist {
+export class Playlist {
   constructor(name, genre) {
     this.name = name;
     this.genre = genre;
@@ -22,7 +22,7 @@ class Playlist {
   
 } 
 
-class PlaylistManager {
+export class PlaylistManager {
   constructor() {
     this.playlists = [];
   }
@@ -45,13 +45,13 @@ class PlaylistManager {
   }
 }
 
-// === Skapar ett exempel för att testa ===
+// Test
 const playlist = new Playlist("Min Spellista", "Rock");
 const song = new Song("Queen", "Bohemian Rhapsody", "Rock");
 
-playlist.addSong(song); // Lägger till låten i spellistan
+playlist.addSong(song);
 
 const manager = new PlaylistManager();
-manager.createPlaylist(playlist); // Lägger till spellistan i hanteraren
+manager.createPlaylist(playlist); 
 
-console.log(manager.getPlaylists()); // Skriver ut spellistorna i konsolen
+console.log(manager.getPlaylists()); 

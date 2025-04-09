@@ -12,9 +12,11 @@ class PlaylistView {
 
   renderAllPlaylists(playlists) {
     this.playlistListElement.innerHTML = "";
-    
+
     playlists.forEach((playlist) => {
       this.renderPlaylist(playlist);
     });
   }
 }
+
+export default PlaylistView;
