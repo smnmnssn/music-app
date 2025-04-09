@@ -1,14 +1,25 @@
-import { Playlist } from "../model/PlaylistModel.js";
+import { Playlist, PlaylistManager } from "../model/PlaylistModel.js";
 import PlaylistView from "../view/PlaylistView.js";
 
-const playlist1 = new Playlist("Min Spellista", "Rock");
-playlist1.addSong({ title: "Bohemian Rhapsody", artist: "Queen" });
-
-const playlist2 = new Playlist("Chill Vibes", "Lo-fi");
-playlist2.addSong({ title: "Coffee Break", artist: "Lo-Fi Beats" });
-
-const playlists = [playlist1, playlist2];
-
+const manager = new PlaylistManager();
 const view = new PlaylistView();
 
-view.renderAllPlaylists(playlists);
+const nameInput = document.getElementById("playlist-name");
+const genreInput = document.getElementById("playlist-genre");
+const createBtn = document.getElementById("create-playlist-btn")
+
+createBtn.addEventListener("click", () => {
+  const name = nameInput.value.trim();
+  const genre = genreInput.value.trim();
+
+  if (name && genre) {
+    const newPlaylist = new Playlist(name, genre);
+    manager.createPlaylist(newPlaylist);
+    view.renderAllPlaylists(manager.getPlaylists());
+
+    nameInput.value = "";
+    genreInput.value = "";
+  }
+
+});
+
