@@ -1,5 +1,6 @@
 import { Playlist, PlaylistManager } from "../model/PlaylistModel.js";
 import PlaylistView from "../view/PlaylistView.js";
+import Song from "../model/SongModel.js";
 
 const manager = new PlaylistManager();
 const view = new PlaylistView();
@@ -10,6 +11,10 @@ const nameInput = document.getElementById("playlist-name");
 const genreInput = document.getElementById("playlist-genre");
 const createBtn = document.getElementById("create-playlist-btn");
 const playlistSelect = document.getElementById("playlist-select");
+const artistInput = document.getElementById("artist-name");
+const titleInput = document.getElementById("song-name");
+const songGenreInput = document.getElementById("song-genre");
+const songForm = document.getElementById("add-song-form");
 
 // Funktion: uppdaterar <select> med alla spellistor
 function updatePlaylistDropdown() {
@@ -28,8 +33,18 @@ const savedPlaylists = JSON.parse(localStorage.getItem("playlists")) || [];
 
 savedPlaylists.forEach((item) => {
   const playlist = new Playlist(item.name, item.genre);
+
+  // Om det finns låtar, återskapa varje som en riktig Song-instans
+  if (item.songs && Array.isArray(item.songs)) {
+    item.songs.forEach((songData) => {
+      const song = new Song(songData.artist, songData.title, songData.genre);
+      playlist.addSong(song);
+    });
+  }
+
   manager.createPlaylist(playlist);
 });
+
 
 view.renderAllPlaylists(manager.getPlaylists());
 updatePlaylistDropdown();
@@ -56,3 +71,40 @@ createBtn.addEventListener("click", () => {
     genreInput.value = "";
   }
 });
+
+songForm.addEventListener("submit", (e) => {
+  e.preventDefault(); 
+
+  const artist = artistInput.value.trim();
+  const title = titleInput.value.trim();
+  const genre = songGenreInput.value.trim();
+  const playlistName = playlistSelect.value;
+
+  if (artist && title && genre && playlistName) {
+    const newSong = new Song(artist, title, genre);
+
+    // 1. Hitta rätt spellista
+    const targetPlaylist = manager.getPlaylists().find(p => p.name === playlistName);
+    if (!targetPlaylist) return;
+
+    // 2. Lägg till låten
+    targetPlaylist.addSong(newSong);
+
+    // 3. Uppdatera localStorage
+    const playlistsToSave = manager.getPlaylists().map(p => ({
+      name: p.name,
+      genre: p.genre,
+      songs: p.songs
+    }));
+    localStorage.setItem("playlists", JSON.stringify(playlistsToSave));
+
+    // 4. Uppdatera vy
+    view.renderAllPlaylists(manager.getPlaylists());
+
+    // 5. Töm fälten
+    artistInput.value = "";
+    titleInput.value = "";
+    songGenreInput.value = "";
+  }
+});
+
