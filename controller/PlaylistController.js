@@ -15,6 +15,7 @@ const artistInput = document.getElementById("artist-name");
 const titleInput = document.getElementById("song-name");
 const songGenreInput = document.getElementById("song-genre");
 const songForm = document.getElementById("add-song-form");
+const genreSelect = document.getElementById("genre-select");
 
 // Funktion: uppdaterar <select> med alla spellistor
 function updatePlaylistDropdown() {
@@ -33,18 +34,14 @@ const savedPlaylists = JSON.parse(localStorage.getItem("playlists")) || [];
 
 savedPlaylists.forEach((item) => {
   const playlist = new Playlist(item.name, item.genre);
-
-  // Om det finns låtar, återskapa varje som en riktig Song-instans
-  if (item.songs && Array.isArray(item.songs)) {
-    item.songs.forEach((songData) => {
+    if (item.songs && Array.isArray(item.songs)) {
+    item.songs.forEach(songData => {
       const song = new Song(songData.artist, songData.title, songData.genre);
       playlist.addSong(song);
     });
   }
-
   manager.createPlaylist(playlist);
 });
-
 
 view.renderAllPlaylists(manager.getPlaylists());
 updatePlaylistDropdown();
@@ -77,7 +74,7 @@ songForm.addEventListener("submit", (e) => {
 
   const artist = artistInput.value.trim();
   const title = titleInput.value.trim();
-  const genre = songGenreInput.value.trim();
+const genre = genreSelect.value;
   const playlistName = playlistSelect.value;
 
   if (artist && title && genre && playlistName) {
@@ -104,7 +101,6 @@ songForm.addEventListener("submit", (e) => {
     // 5. Töm fälten
     artistInput.value = "";
     titleInput.value = "";
-    songGenreInput.value = "";
   }
 });
 

@@ -27,7 +27,7 @@
 <div id="playlist-list"></div>
 
 
-  <h2>Lägg till låt i spellista</h2>
+<h2>Lägg till låt i spellista</h2>
 <form id="add-song-form">
   <div class="form-group">
     <label for="artist-name">Artist</label>
@@ -39,13 +39,18 @@
     <input type="text" id="song-name" placeholder="Låtens titel" />
   </div>
 
+  <div class="form-group">
+    <label for="genre-select">Välj genre</label>
+    <select id="genre-select">
+      <option value="Rock">Rock</option>
+      <option value="Jazz">Jazz</option>
+      <option value="Pop">Pop</option>
+      <option value="Classical">Classical</option>
+      <option value="Electronic">Electronic</option>
+    </select>
+  </div>
 
   <div class="form-group">
-    <div class="form-group">
-  <label for="song-genre">Genre</label>
-  <input type="text" id="song-genre" placeholder="Genre" />
-</div>
-
     <label for="playlist-select">Välj spellista</label>
     <select id="playlist-select">
       <!-- Alternativ läggs till i JavaScript -->
@@ -54,6 +59,7 @@
 
   <button type="submit" id="add-song-btn">Lägg till låt</button>
 </form>
+
 
 
 </body>
