@@ -9,15 +9,47 @@
 </head>
 
 <body>
-  <h1>Spellistor</h1>
+  <h2>Skapa ny spellista</h2>
+<form id="create-playlist-form">
+  <div class="form-group">
+    <label for="playlist-name">Namn på spellista</label>
+    <input type="text" id="playlist-name" placeholder="Ny spellista..." />
+  </div>
 
-  <div id="playlist-container"></div>
-  <div id="playlist-list"></div>
+  <div class="form-group">
+    <label for="playlist-genre">Genre</label>
+    <input type="text" id="playlist-genre" placeholder="Genre..." />
+  </div>
+
+  <button type="submit" id="create-playlist-btn">Skapa spellista</button>
+</form>
+<h2>Alla spellistor</h2>
+<div id="playlist-list"></div>
 
 
-  <input type="text" id="playlist-name" placeholder="Ny spellista..." />
-  <input type="text" id="playlist-genre" placeholder="Genre..." />
-  <button id="create-playlist-btn">Skapa Spellista</button>
+  <h2>Lägg till låt i spellista</h2>
+<form id="add-song-form">
+  <div class="form-group">
+    <label for="artist-name">Artist</label>
+    <input type="text" id="artist-name" placeholder="Artistnamn" />
+  </div>
+
+  <div class="form-group">
+    <label for="song-name">Låttitel</label>
+    <input type="text" id="song-name" placeholder="Låtens titel" />
+  </div>
+
+
+  <div class="form-group">
+    <label for="playlist-select">Välj spellista</label>
+    <select id="playlist-select">
+      <!-- Alternativ läggs till i JavaScript -->
+    </select>
+  </div>
+
+  <button type="submit" id="add-song-btn">Lägg till låt</button>
+</form>
+
 
 </body>
 </html>
