@@ -1,82 +1,77 @@
-📘 Inlämningsuppgift – Arbetsmetodik
-Uppgiften består av två moment:
+## Versionshantering med Git
 
-Moment 1 – IG / G / VG betygsatt
+Projektet använder **Git** med följande struktur för grenar:
 
-Moment 2 – IG / G betygsatt
+- `main` – Stabil produktionsversion
+- `development` – Aktiv utvecklingsmiljö
+- `features` – Nya funktioner byggs här
 
-🎵 Moment 1 – Musikapplikation
-Skapa en applikation som hanterar spellistor med musik.
-Funktionalitet som ska ingå:
+---
 
-Skapa spellistor
+### Arbetsflöde
 
-Lista spellistor
+1. **Utveckla en ny funktion:**
+   ```bash
+   git checkout -b features
+   ```
+2. **Utveckla funktion, spara och pusha:**
+   ```bash
+   git add .
+   git commit -m "Lägg till ny funktion"
+   git push origin features
+   ```
+3. **Merge feature in i development när du är klar:**
+   ```bash
+   git switch development
+   git merge features
+   git push origin development
+   ```
+4. **Merge development till main när det är färdigtestat:**
+   ```bash
+   git switch main
+   git merge development
+   git push origin main
+   ```
 
-Kategorisera musik efter:
+## Hantera Merge-konflikter i Git
 
-Genre
+När två grenar har ändrat samma rad i samma fil kan en **merge-konflikt** uppstå. Så här löser du det:
 
-Artist
+---
 
-Låtar
+### 1. Identifiera konflikten
 
-🛠 Krav
-Använd Git för versionshantering.
+När du försöker göra en merge och det blir konflikt, ser du detta:
 
-Följande brancher ska finnas:
+```bash
+CONFLICT (content): Merge conflict in filnamn.js
+Automatic merge failed; fix conflicts and then commit the result.
+```
 
-main
+### 2. Öppna filen och hitta markeringen
 
-development
+```bash
+<<<<<<< HEAD
+kod från den aktuella grenen
+=========
+kod från grenen du försöker merga in
+>>>>>>> feature
+```
 
-features
+### 3. Lös konflikten
 
-Applikationen ska publiceras på GitHub med motsvarande brancher.
+Du ska manuellt välja vilken kod du vill behålla – eller kombinera det bästa från båda. Sen tar du bort konfliktmarkeringarna:
 
-Använd endast JavaScript (ej TypeScript).
+```bash
+ "<<<<<<<"
+ "========="
+ ">>>>>>>"
+```
 
-Design/utseende är valfritt – fokus ligger på JavaScript-koden.
+### 4. Spara och commit:a
 
-📝 Dokumentation
-Beskriv Git-kommandon ni använt för att:
+```bash
+git add filnamn.js
+git commit -m "Löst merge-konflikt i filnamn.js"
 
-Skapa ny branch
-
-Slå samman brancher
-
-Beskriv hur konflikter hanteras i Git.
-
-Använd gärna skärmdumpar för att visa hur en konflikt ser ut och löses.
-
-🎓 Betyg
-G (Godkänt): Samtliga krav ovan är genomförda.
-
-VG (Väl godkänt): Applikationen är byggd enligt MVC-designmönstret.
-
-📄 Moment 2 – Skriftlig Reflektion
-Momentet består av två delar:
-
-✍️ Del 1 – Reflektion kring kodstädning
-Förklara på ett enkelt och tydligt sätt hur man går tillväga för att städa upp kod i ett stort kodbaserat system (t.ex. 10 000-tals rader).
-
-Utgå ifrån:
-
-🧼 Clean Code
-
-🧱 Clean Architecture
-
-🧩 Designmönster
-
-⚙️ S.O.L.I.D-principerna
-
-Beskriv hur man bör tänka när man bygger ett stort system, t.ex. ett med hundratusentals rader kod.
-
-📤 Inlämning
-Koden ska finnas på GitHub med publik länk så att läraren kan:
-
-Klona projektet
-
-Eller skapa en fork
-
-All dokumentation ska lämnas in på Itslearning som PDF-filer.
+```
