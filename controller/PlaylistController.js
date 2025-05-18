@@ -5,7 +5,6 @@ import PlaylistView from "../view/PlaylistView.js";
 const manager = new PlaylistManager();
 const view = new PlaylistView();
 
-// DOM elements
 const nameInput = document.getElementById("playlist-name");
 const genreInput = document.getElementById("playlist-genre-select");
 const createBtn = document.getElementById("create-playlist-btn");
@@ -17,7 +16,7 @@ const songForm = document.getElementById("add-song-form");
 const genreSelect = document.getElementById("genre-select");
 const filterGenreSelect = document.getElementById("filter-genre");
 
-// Funktion: uppdaterar <select> med alla spellistor
+// Uppdaterar spellistemenyn
 function updatePlaylistDropdown() {
   playlistSelect.innerHTML = "";
   const playlists = manager.getPlaylists();
@@ -29,10 +28,10 @@ function updatePlaylistDropdown() {
   });
 }
 
+// Filtrerar spellistor på genre
 filterGenreSelect.addEventListener("change", () => {
   const selectedGenre = filterGenreSelect.value;
   const allPlaylists = manager.getPlaylists();
-
   if (selectedGenre === "all") {
     view.renderAllPlaylists(allPlaylists);
   } else {
@@ -41,9 +40,8 @@ filterGenreSelect.addEventListener("change", () => {
   }
 });
 
-// Ladda spellistor från localStorage
+// Laddar sparade spellistor från localStorage
 const savedPlaylists = JSON.parse(localStorage.getItem("playlists")) || [];
-
 savedPlaylists.forEach((item) => {
   const playlist = new Playlist(item.name, item.genre);
   if (item.songs && Array.isArray(item.songs)) {
@@ -58,61 +56,74 @@ savedPlaylists.forEach((item) => {
 view.renderAllPlaylists(manager.getPlaylists());
 updatePlaylistDropdown();
 
-// Lyssnar på klick på "Skapa spellista"
+// Hanterar klick för att ta bort låtar eller spellistor
+document.getElementById("playlist-list").addEventListener("click", (e) => {
+  if (e.target.classList.contains("delete-song-btn")) {
+    const title = e.target.dataset.title;
+    const playlistName = e.target.dataset.playlist;
+    const playlist = manager.getPlaylists().find(p => p.name === playlistName);
+    if (!playlist) return;
+    playlist.removeSong(title);
+    const playlistsToSave = manager.getPlaylists().map(p => ({
+      name: p.name,
+      genre: p.genre,
+      songs: p.songs
+    }));
+    localStorage.setItem("playlists", JSON.stringify(playlistsToSave));
+    view.renderAllPlaylists(manager.getPlaylists());
+  }
+
+  if (e.target.classList.contains("delete-playlist-btn")) {
+    const playlistName = e.target.dataset.name;
+    manager.deletePlaylist(playlistName);
+    const playlistsToSave = manager.getPlaylists().map(p => ({
+      name: p.name,
+      genre: p.genre,
+      songs: p.songs
+    }));
+    localStorage.setItem("playlists", JSON.stringify(playlistsToSave));
+    view.renderAllPlaylists(manager.getPlaylists());
+    updatePlaylistDropdown();
+  }
+});
+
+// Skapar ny spellista
 createBtn.addEventListener("click", () => {
   const name = nameInput.value.trim();
   const genre = genreInput.value;
-
   if (name && genre) {
     const newPlaylist = new Playlist(name, genre);
-    manager.createPlaylist(newPlaylist); // lägg till i modellen
-    view.renderAllPlaylists(manager.getPlaylists()); // uppdatera visningen
-    updatePlaylistDropdown(); // uppdatera dropdown
-
-    // Spara till localStorage
+    manager.createPlaylist(newPlaylist);
+    view.renderAllPlaylists(manager.getPlaylists());
+    updatePlaylistDropdown();
     const storedPlaylists = JSON.parse(localStorage.getItem("playlists")) || [];
     const playlistToSave = { name, genre };
     storedPlaylists.push(playlistToSave);
     localStorage.setItem("playlists", JSON.stringify(storedPlaylists));
-
-    // Töm fält
     nameInput.value = "";
     genreInput.value = "";
   }
 });
 
+// Lägger till låt i spellista
 songForm.addEventListener("submit", (e) => {
   e.preventDefault();
-
   const artist = artistInput.value.trim();
   const title = titleInput.value.trim();
   const genre = genreSelect.value;
   const playlistName = playlistSelect.value;
-
   if (artist && title && genre && playlistName) {
     const newSong = new Song(artist, title, genre);
-
-    // 1. Hitta rätt spellista
-    const targetPlaylist = manager
-      .getPlaylists()
-      .find((p) => p.name === playlistName);
+    const targetPlaylist = manager.getPlaylists().find((p) => p.name === playlistName);
     if (!targetPlaylist) return;
-
-    // 2. Lägg till låten
     targetPlaylist.addSong(newSong);
-
-    // 3. Uppdatera localStorage
     const playlistsToSave = manager.getPlaylists().map((p) => ({
       name: p.name,
       genre: p.genre,
       songs: p.songs,
     }));
     localStorage.setItem("playlists", JSON.stringify(playlistsToSave));
-
-    // 4. Uppdatera vy
     view.renderAllPlaylists(manager.getPlaylists());
-
-    // 5. Töm fälten
     artistInput.value = "";
     titleInput.value = "";
   }
